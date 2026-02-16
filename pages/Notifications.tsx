@@ -18,41 +18,43 @@ const Notifications: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 animate-fadeIn">
-      <div className="glass p-8 rounded-[2.5rem]">
-        <h3 className="text-xl font-bold mb-8">Smart Notifications</h3>
-        <div className="space-y-4">
+    <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn">
+      <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-10 rounded-2xl card-shadow">
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-8">Smart Alerts & Monitoring</h3>
+        <div className="space-y-2">
           {[
-            { id: 'lowCrowd', label: 'Low Crowd Alerts', desc: 'Notify me when the mess occupancy is below 20%', icon: <Zap className="text-yellow-500" /> },
-            { id: 'suitableMeal', label: 'Suitable Meal Found', desc: 'Get alerted when a recommended dish is on today\'s menu', icon: <Bell className="text-emerald-500" /> },
-            { id: 'weightChange', label: 'Weight Progress', desc: 'Weekly summary of your weight transformation', icon: <TrendingDown className="text-blue-500" /> },
-            { id: 'peakHour', label: 'Peak Hour Warning', desc: 'Alert me before traditional peak hours (12:30 PM, 7:30 PM)', icon: <Info className="text-red-500" /> },
+            { id: 'lowCrowd', label: 'Low Crowd Alerts', desc: 'Notify when mess occupancy drops below 20%', icon: <Zap className="text-yellow-500" /> },
+            { id: 'suitableMeal', label: 'ML Nutrition Match', desc: 'Get alerted when recommended meals are served', icon: <Bell className="text-emerald-500" /> },
+            { id: 'weightChange', label: 'Weekly Summary', desc: 'Performance report on weight and calories', icon: <TrendingDown className="text-blue-500" /> },
+            { id: 'peakHour', label: 'Traffic Warning', desc: 'Automatic alert before traditional peak hours', icon: <Info className="text-red-500" /> },
           ].map((item) => (
-            <div key={item.id} className="flex items-center justify-between p-6 bg-slate-50 dark:bg-zinc-800/50 rounded-3xl hover:bg-slate-100 dark:hover:bg-zinc-800 transition-all">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-white dark:bg-zinc-900 rounded-2xl shadow-sm">{item.icon}</div>
+            <div key={item.id} className="flex items-center justify-between p-6 rounded-2xl hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors group">
+              <div className="flex items-center gap-5">
+                <div className="p-3.5 bg-slate-50 dark:bg-zinc-800 rounded-xl group-hover:bg-white dark:group-hover:bg-zinc-700 transition-colors shadow-sm">{item.icon}</div>
                 <div>
-                  <h4 className="font-bold">{item.label}</h4>
-                  <p className="text-sm text-slate-500">{item.desc}</p>
+                  <h4 className="font-bold text-slate-900 dark:text-white">{item.label}</h4>
+                  <p className="text-sm text-slate-500 dark:text-zinc-500 mt-0.5">{item.desc}</p>
                 </div>
               </div>
               <button 
                 onClick={() => toggle(item.id as any)}
-                className={`w-14 h-8 rounded-full relative transition-all duration-300 ${settings[item.id as keyof typeof settings] ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-zinc-700'}`}
+                className={`w-14 h-8 rounded-full relative transition-all duration-300 ${settings[item.id as keyof typeof settings] ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-zinc-700'}`}
               >
-                <div className={`absolute top-1 w-6 h-6 bg-white rounded-full shadow-md transition-all duration-300 ${settings[item.id as keyof typeof settings] ? 'left-7' : 'left-1'}`}></div>
+                <div className={`absolute top-1 w-6 h-6 bg-white rounded-full shadow-sm transition-all duration-300 ${settings[item.id as keyof typeof settings] ? 'left-7' : 'left-1'}`}></div>
               </button>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-zinc-900 text-white p-8 rounded-[2.5rem] flex items-center justify-between">
+      <div className="bg-slate-900 dark:bg-zinc-800 p-10 rounded-2xl border border-slate-800 dark:border-zinc-700 flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
-          <h4 className="text-lg font-bold">Email Digest</h4>
-          <p className="text-zinc-400 text-sm">Receive a weekly PDF report of your health metrics</p>
+          <h4 className="text-xl font-bold text-white">Full Weekly Health Digest</h4>
+          <p className="text-slate-400 text-sm mt-1 max-w-md">Get a professional PDF report delivered to your university email every Sunday evening.</p>
         </div>
-        <button className="px-6 py-3 bg-white text-zinc-900 rounded-2xl font-bold hover:bg-zinc-200 transition-all">Enable</button>
+        <button className="whitespace-nowrap px-8 py-4 bg-emerald-500 text-slate-950 font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20">
+          Activate PDF Reports
+        </button>
       </div>
     </div>
   );

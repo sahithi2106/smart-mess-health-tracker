@@ -11,16 +11,22 @@ import { User } from './types';
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState('dashboard');
+  
+  // Initialize state based on localStorage or system preference
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem('theme') === 'dark';
+    const saved = localStorage.getItem('theme');
+    if (saved) return saved === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
+  // Sync state with DOM and localStorage
   useEffect(() => {
+    const root = window.document.documentElement;
     if (darkMode) {
-      document.documentElement.classList.add('dark');
+      root.classList.add('dark');
       localStorage.setItem('theme', 'dark');
     } else {
-      document.documentElement.classList.remove('dark');
+      root.classList.remove('dark');
       localStorage.setItem('theme', 'light');
     }
   }, [darkMode]);

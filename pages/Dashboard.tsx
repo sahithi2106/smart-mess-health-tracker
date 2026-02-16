@@ -8,7 +8,8 @@ import {
   Utensils, 
   TrendingDown, 
   ChevronRight,
-  Info
+  TrendingUp,
+  Clock
 } from 'lucide-react';
 import { MessStatus, CrowdData, FoodRecommendation, WeightLog, User } from '../types';
 
@@ -45,112 +46,139 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
     fetchData();
   }, [user]);
 
-  if (loading) return <div className="p-8 text-center">Analysing health metrics...</div>;
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
+        <p className="text-slate-500 font-medium animate-pulse">Syncing health data...</p>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 animate-fadeIn">
-      
-      {/* Quick Stats */}
-      <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Mess Status Card */}
-        <div className="glass p-6 rounded-3xl relative overflow-hidden group">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <p className="text-sm text-slate-500 dark:text-zinc-400 font-medium">Mess Occupancy</p>
-              <h3 className="text-3xl font-bold mt-1">
-                {mess?.occupancy} <span className="text-lg font-normal text-slate-400">/ {mess?.capacity}</span>
-              </h3>
-            </div>
-            <div className={`p-3 rounded-2xl ${mess?.entryAllowed ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>
+    <div className="space-y-8 animate-fadeIn">
+      {/* Top Row: Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Mess Status */}
+        <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-8 rounded-2xl card-shadow card-shadow-hover transition-all duration-300">
+          <div className="flex justify-between items-start mb-6">
+            <div className="p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 rounded-xl">
               <Users size={24} />
             </div>
+            <div className="flex flex-col items-end">
+              <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${mess?.isOpen ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${mess?.isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></span>
+                {mess?.isOpen ? 'Open' : 'Closed'}
+              </span>
+            </div>
           </div>
-          <div className="w-full bg-slate-200 dark:bg-zinc-800 h-2 rounded-full overflow-hidden">
+          <p className="text-slate-500 dark:text-zinc-400 font-semibold text-sm">Mess Occupancy</p>
+          <div className="flex items-baseline gap-2 mt-1 mb-6">
+            <h3 className="text-3xl font-bold text-slate-900 dark:text-white">{mess?.occupancy}</h3>
+            <span className="text-slate-400 text-sm font-medium">of {mess?.capacity} students</span>
+          </div>
+          <div className="w-full bg-slate-100 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
             <div 
-              className="bg-emerald-500 h-full transition-all duration-1000" 
+              className="bg-emerald-500 h-full transition-all duration-1000 ease-out" 
               style={{ width: `${((mess?.occupancy || 0) / (mess?.capacity || 1)) * 100}%` }}
             ></div>
           </div>
-          <p className="mt-4 text-sm flex items-center gap-1">
-            <span className={`w-2 h-2 rounded-full ${mess?.isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></span>
-            {mess?.isOpen ? 'Entry Allowed' : 'Closed Now'}
-          </p>
         </div>
 
-        {/* Weight Progress Card */}
-        <div className="glass p-6 rounded-3xl group">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <p className="text-sm text-slate-500 dark:text-zinc-400 font-medium">Weight Trend</p>
-              <h3 className="text-3xl font-bold mt-1">75.0 <span className="text-lg font-normal text-slate-400">kg</span></h3>
-            </div>
-            <div className="p-3 bg-blue-100 text-blue-600 rounded-2xl">
+        {/* Weight Change */}
+        <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-8 rounded-2xl card-shadow card-shadow-hover transition-all duration-300">
+          <div className="flex justify-between items-start mb-6">
+            <div className="p-3 bg-blue-50 dark:bg-blue-500/10 text-blue-600 rounded-xl">
               <Activity size={24} />
             </div>
+            <span className="flex items-center gap-1 text-emerald-500 text-xs font-bold">
+              <TrendingDown size={14} /> -1.2kg
+            </span>
           </div>
-          <div className="flex items-center gap-2 text-emerald-500 font-medium text-sm">
-            <TrendingDown size={16} />
-            <span>1.2kg lost this week</span>
+          <p className="text-slate-500 dark:text-zinc-400 font-semibold text-sm">Current Weight</p>
+          <div className="flex items-baseline gap-2 mt-1 mb-6">
+            <h3 className="text-3xl font-bold text-slate-900 dark:text-white">75.0</h3>
+            <span className="text-slate-400 text-sm font-medium">Kilograms</span>
           </div>
-          <div className="mt-4 h-12 flex items-end gap-1">
-            {[40, 60, 45, 70, 55, 80, 50].map((h, i) => (
-              <div key={i} className="flex-1 bg-blue-500/20 hover:bg-blue-500 transition-all rounded-t-md" style={{height: `${h}%`}}></div>
-            ))}
+          <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium italic">
+            <Clock size={12} /> Last updated: Today, 8:45 AM
           </div>
         </div>
 
-        {/* Crowd Graph */}
-        <div className="sm:col-span-2 glass p-6 rounded-3xl">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-lg">Live Crowd Density</h3>
-            <button className="text-emerald-500 text-sm font-semibold flex items-center gap-1">
-              Live Forecast <ChevronRight size={16} />
-            </button>
+        {/* Nutritional Goal */}
+        <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-8 rounded-2xl card-shadow card-shadow-hover transition-all duration-300">
+          <div className="flex justify-between items-start mb-6">
+            <div className="p-3 bg-orange-50 dark:bg-orange-500/10 text-orange-600 rounded-xl">
+              <Utensils size={24} />
+            </div>
+            <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Goal: Maintain</span>
           </div>
-          <CrowdChart data={crowd} type="line" />
+          <p className="text-slate-500 dark:text-zinc-400 font-semibold text-sm">Daily Calorie Target</p>
+          <div className="flex items-baseline gap-2 mt-1 mb-6">
+            <h3 className="text-3xl font-bold text-slate-900 dark:text-white">2,450</h3>
+            <span className="text-slate-400 text-sm font-medium">kcal</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex-1 h-1.5 bg-slate-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+              <div className="w-[65%] h-full bg-orange-500 rounded-full"></div>
+            </div>
+            <span className="text-xs font-bold text-slate-600 dark:text-zinc-400">1,592 consumed</span>
+          </div>
         </div>
       </div>
 
-      {/* Side Profile/Recommendation */}
-      <div className="md:col-span-4 space-y-6">
-        {/* ML Recommendation */}
-        <div className="bg-zinc-900 text-white p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-10">
-            <Utensils size={100} />
-          </div>
-          <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
-              <Activity size={14} /> AI Recommendation
+      {/* Main Grid: Crowd and Recommendation */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Left Col: Graph */}
+        <div className="lg:col-span-8 space-y-8">
+          <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-8 rounded-2xl card-shadow">
+            <div className="flex justify-between items-center mb-10">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Live Crowd Density</h3>
+                <p className="text-sm text-slate-500">Real-time occupancy sensor data</p>
+              </div>
+              <button className="px-4 py-2 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-sm font-bold text-slate-600 dark:text-zinc-300 hover:bg-slate-100 transition-colors">
+                Past 24h
+              </button>
             </div>
-            <h3 className="text-2xl font-bold leading-tight mb-2">{recommendation?.meal}</h3>
-            <p className="text-zinc-400 text-sm mb-6">{recommendation?.calories}</p>
-            
-            <div className="bg-zinc-800/50 p-4 rounded-2xl border border-zinc-700/50 mb-6">
-              <p className="text-xs text-zinc-400 leading-relaxed italic">
-                "{recommendation?.reason}"
-              </p>
+            <div className="h-72">
+              <CrowdChart data={crowd} type="line" />
             </div>
-            
-            <button className="w-full bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold py-4 rounded-2xl transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
-              Log this Meal <ChevronRight size={18} />
-            </button>
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="glass p-6 rounded-3xl">
-          <h3 className="font-bold mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { label: 'Add Weight', color: 'bg-indigo-50 text-indigo-600' },
-              { label: 'View Menu', color: 'bg-orange-50 text-orange-600' },
-              { label: 'Peak Times', color: 'bg-pink-50 text-pink-600' },
-              { label: 'Supplements', color: 'bg-emerald-50 text-emerald-600' },
-            ].map((btn, i) => (
-              <button key={i} className={`p-4 rounded-2xl ${btn.color} font-semibold text-sm transition-transform active:scale-95`}>
-                {btn.label}
-              </button>
-            ))}
+        {/* Right Col: Recommendation & Quick Actions */}
+        <div className="lg:col-span-4 space-y-6">
+          <div className="bg-slate-900 dark:bg-zinc-800 text-white p-8 rounded-2xl shadow-xl shadow-slate-900/10 flex flex-col h-full border border-slate-800 dark:border-zinc-700">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-xs font-bold uppercase tracking-wider mb-6 w-fit">
+              <Activity size={14} /> AI Recommendation
+            </div>
+            <h3 className="text-2xl font-bold leading-snug mb-3">{recommendation?.meal}</h3>
+            <p className="text-slate-400 text-sm font-medium mb-6">{recommendation?.calories}</p>
+            <div className="bg-white/5 p-5 rounded-xl border border-white/5 mb-8">
+              <p className="text-xs text-slate-300 leading-relaxed italic opacity-80">
+                "{recommendation?.reason}"
+              </p>
+            </div>
+            <button className="mt-auto w-full bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold py-4 rounded-xl transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 group">
+              Confirm Meal <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+
+          <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-8 rounded-2xl card-shadow">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white mb-6">Quick Actions</h3>
+            <div className="grid grid-cols-1 gap-3">
+              {[
+                { label: 'Log New Weight', color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/20' },
+                { label: 'Today\'s Mess Menu', color: 'text-orange-600 bg-orange-50 dark:bg-orange-900/20' },
+                { label: 'Historical Analytics', color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-900/20' },
+              ].map((btn, i) => (
+                <button key={i} className={`w-full p-4 rounded-xl ${btn.color} font-bold text-sm text-left flex items-center justify-between hover:opacity-80 transition-opacity`}>
+                  {btn.label}
+                  <ChevronRight size={16} />
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
