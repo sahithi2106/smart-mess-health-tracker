@@ -1,20 +1,63 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Smart Mess Management & Health Tracker
 
-# Run and deploy your AI Studio app
+A web-based application designed to improve the university mess experience using real-time occupancy monitoring, IoT integration, and personalized health recommendations.
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/drive/1MxMQ_C0CSI6usOYQ6H97Qi_Pys-VEgcJ
+## Overview
+The system helps students avoid crowding, monitor their health data, and receive meal suggestions based on their body metrics and lifestyle.  
+It also assists mess administrators in managing capacity efficiently.
 
-## Run Locally
+---
 
-**Prerequisites:**  Node.js
+## Key Features
 
+### Student Side
+- Live mess occupancy status
+- Crowd density monitoring
+- Personalized food recommendations (ML based)
+- Weight tracking and progress charts
+- Smart notifications
+- User profile management
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Admin Side
+- Real-time occupancy monitoring
+- Entry and exit logs
+- Manual mess control
+- Menu updates
+- Analytics dashboard
+
+---
+
+## Technology Stack
+
+**Frontend**
+- HTML
+- CSS
+- JavaScript
+
+**Backend (Planned Integration)**
+- Python Flask API
+
+**Machine Learning**
+- Model built in Jupyter Notebook
+
+**Hardware Integration**
+- Arduino
+- IR Sensors
+- Load Cell + HX711
+- ESP8266 WiFi Module
+
+---
+
+## Project Objective
+To create an intelligent mess management system that reduces crowding, improves time management, and provides personalized dietary assistance for students.
+
+---
+
+## Future Enhancements
+- Automated billing
+- QR/RFID student identification
+- Nutrition tracking
+- AI calorie planning
+
